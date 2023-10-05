@@ -41,7 +41,9 @@ public class SecurityConfig {
                                     "/auth/login",
                                     "/"
                             ).permitAll()
-                            .requestMatchers("/product/**").authenticated();
+                            .requestMatchers(
+                                    "/ops/**"
+                            ).authenticated();
                 })
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

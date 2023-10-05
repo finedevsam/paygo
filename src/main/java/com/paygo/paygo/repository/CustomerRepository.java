@@ -6,5 +6,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, String> {
+    boolean existsByMnemonic(String mnemonic);
+    boolean existsByEmail(String email);
+    boolean existsByIdNo(String idNo);
+    boolean existsByMobileNo(String mobileNo);
 
 }

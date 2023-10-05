@@ -61,6 +61,9 @@ public class Customer {
     @Column(name = "alt_mobile_no")
     private String altMobileNo;
 
+    @Column(name = "create_by")
+    private String createdBy;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private Timestamp createdAt;
