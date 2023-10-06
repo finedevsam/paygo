@@ -62,9 +62,9 @@ public class CustomerServiceImp implements CustomerService {
             Customer newCustomer = getCustomer(customer, userProfile);
             customerRepository.save(newCustomer);
 
-            Map<Object, Object> succes = new HashMap<>();
-            succes.put("message", "Customer created successfully");
-            return dataResponse.dataResponse("00", "success", succes, HttpStatus.CREATED);
+            Map<Object, Object> success = new HashMap<>();
+            success.put("message", "Customer created successfully");
+            return dataResponse.dataResponse("00", "success", success, HttpStatus.CREATED);
         }
     }
 
@@ -84,6 +84,7 @@ public class CustomerServiceImp implements CustomerService {
         newCustomer.setLastName(customer.getLastName().toUpperCase());
         newCustomer.setMaidenName(customer.getMaidenName().toUpperCase());
         newCustomer.setMobileNo(customer.getMobileNo().toUpperCase());
+        newCustomer.setMiddleName(customer.getMiddleName());
         return newCustomer;
     }
 }
