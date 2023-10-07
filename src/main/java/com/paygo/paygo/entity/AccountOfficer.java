@@ -1,5 +1,6 @@
 package com.paygo.paygo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class AccountOfficer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @JsonIgnore
     private String id;
 
     private String code;

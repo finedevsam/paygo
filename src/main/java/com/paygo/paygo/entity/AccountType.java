@@ -2,6 +2,7 @@ package com.paygo.paygo.entity;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
@@ -23,6 +24,7 @@ public class AccountType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @JsonIgnore
     private String id;
     
     @Column(name = "code")

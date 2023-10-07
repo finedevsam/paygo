@@ -14,11 +14,14 @@ import com.paygo.paygo.utils.AccountManager;
 import com.paygo.paygo.utils.Core;
 import com.paygo.paygo.utils.DataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -86,11 +89,25 @@ public class AccountServiceImpl implements AccountService {
             accountOfficer.setName(accountOfficerDto.getName());
             accountOfficer.setMobileNumber(accountOfficerDto.getMobileNumber());
             accountOfficerRepository.save(accountOfficer);
-
             return dataResponse.dataResponse("00", "success", accountOfficer, HttpStatus.OK);
         }catch (Exception e){
             return dataResponse.dataResponse("99", "fail", errorMsg(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public Page<AccountOfficer> allAccountOfficer(Pageable pageable) {
+        return accountOfficerRepository.findAll(pageable);
+    }
+
+    @Override
+    public ResponseEntity<?> fetchAccountByCif(String cif) {
+        if(!customerRepository.existsByCif(cif)){
+            return dataResponse.dataResponse("99", "fail", errorMsg("Invalid CIF"), HttpStatus.BAD_REQUEST);
+        }
+        Customer customer = customerRepository.findCustomerByCif(cif);
+        List<Account> accounts = accountRepository.findAllByCustomer(customer);
+        return dataResponse.dataResponse("00", "success", accounts, HttpStatus.OK);
     }
 
     private Map<Object, Object> errorMsg(String message){

@@ -1,5 +1,6 @@
 package com.paygo.paygo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @JsonIgnore
     private String id;
 
     @Column(unique = true)
