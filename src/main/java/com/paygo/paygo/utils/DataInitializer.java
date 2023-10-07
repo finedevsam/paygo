@@ -68,6 +68,19 @@ public class DataInitializer implements ApplicationRunner{
         }
 
         // Create Default Account Type at Initialization
+        List<Map<Object, String>> records = getRecords();
+
+        for(Map<Object, String> obj: records){
+            if(!accountTypeRepository.existsByCode(obj.get("code"))){
+                AccountType accountType = new AccountType();
+                accountType.setCode(obj.get("code"));
+                accountType.setName(obj.get("name"));
+                accountTypeRepository.save(accountType);
+            }
+        }
+    }
+
+    private static List<Map<Object, String>> getRecords() {
         List<Map<Object, String>> records = new ArrayList<>();
 
         Map<Object, String> savings = new HashMap<>();
@@ -80,20 +93,12 @@ public class DataInitializer implements ApplicationRunner{
         current.put("name", "CURRENTS");
         records.add(current);
 
-        
+
         Map<Object, String> loan = new HashMap<>();
         loan.put("code", "300");
         loan.put("name", "LOANS");
         records.add(loan);
-
-        for(Map<Object, String> obj: records){
-            if(!accountTypeRepository.existsByCode(obj.get("code"))){
-                AccountType accountType = new AccountType();
-                accountType.setCode(obj.get("code"));
-                accountType.setName(obj.get("name"));
-                accountTypeRepository.save(accountType);
-            }
-        }
+        return records;
     }
-    
+
 }

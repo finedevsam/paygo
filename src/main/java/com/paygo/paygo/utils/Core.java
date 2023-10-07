@@ -11,4 +11,10 @@ public class Core {
         int randomNumber = random.nextInt(999999);
         return String.format("%06d", randomNumber);
     }
+
+    public String getCode(){
+        Random random = new Random();
+        int randomNumber = random.nextInt(9999);
+        return String.format("%04d", randomNumber);
+    }
 }

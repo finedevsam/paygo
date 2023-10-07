@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class CustomerServiceImp implements CustomerService {
@@ -65,6 +66,18 @@ public class CustomerServiceImp implements CustomerService {
             Map<Object, Object> success = new HashMap<>();
             success.put("message", "Customer created successfully");
             return dataResponse.dataResponse("00", "success", success, HttpStatus.CREATED);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> fetchCustomer(String cif) {
+        Customer customer = customerRepository.findCustomerByCif(cif);
+        if(!Objects.equals(customer, null)){
+            return dataResponse.dataResponse("00", "success", customer, HttpStatus.OK);
+        }else {
+            Map<Object, Object> error = new HashMap<>();
+            error.put("message", "Customer record not found");
+            return dataResponse.dataResponse("00", "success", error, HttpStatus.OK);
         }
     }
 
