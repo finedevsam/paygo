@@ -39,6 +39,7 @@ public class SecurityConfig {
                     auth.requestMatchers(
                                     "/auth/register",
                                     "/auth/login",
+                                    "/ops/account/validate",
                                     "/"
                             ).permitAll()
                             .requestMatchers(

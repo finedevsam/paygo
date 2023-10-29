@@ -2,6 +2,7 @@ package com.paygo.paygo.service;
 
 import com.paygo.paygo.dto.AccountDto;
 import com.paygo.paygo.dto.AccountOfficerDto;
+import com.paygo.paygo.dto.FundTransferDto;
 import com.paygo.paygo.entity.AccountOfficer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,4 +17,8 @@ public interface AccountService {
     Page<AccountOfficer> allAccountOfficer(Pageable pageable);
 
     ResponseEntity<?> fetchAccountByCif(String cif);
+
+    ResponseEntity<?> validateAccount(String accountNo);
+
+    ResponseEntity<?> fundTransfer(FundTransferDto fundTransferDto);
 }

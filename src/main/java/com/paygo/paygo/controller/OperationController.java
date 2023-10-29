@@ -53,4 +53,9 @@ public class OperationController {
     public ResponseEntity<?> fetchCustomerAccountByCif(@RequestParam(name = "cif") String cif){
         return accountService.fetchAccountByCif(cif);
     }
+
+    @GetMapping("account/validate")
+    public ResponseEntity<?> validateAccount(@RequestParam(name = "accountNo") String accountNo){
+        return accountService.validateAccount(accountNo);
+    }
 }

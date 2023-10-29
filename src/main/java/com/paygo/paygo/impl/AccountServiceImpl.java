@@ -2,6 +2,7 @@ package com.paygo.paygo.impl;
 
 import com.paygo.paygo.dto.AccountDto;
 import com.paygo.paygo.dto.AccountOfficerDto;
+import com.paygo.paygo.dto.FundTransferDto;
 import com.paygo.paygo.entity.Account;
 import com.paygo.paygo.entity.AccountOfficer;
 import com.paygo.paygo.entity.Customer;
@@ -108,6 +109,53 @@ public class AccountServiceImpl implements AccountService {
         Customer customer = customerRepository.findCustomerByCif(cif);
         List<Account> accounts = accountRepository.findAllByCustomer(customer);
         return dataResponse.dataResponse("00", "success", accounts, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> validateAccount(String accountNo) {
+        Account account = accountRepository.findAccountsByAccountNumber(accountNo);
+        if (Objects.isNull(account)){
+            return dataResponse.dataResponse("99", "fail", errorMsg("Account not Valid"), HttpStatus.BAD_REQUEST);
+        }
+        Customer customer = customerRepository.findCustomerById(account.getCustomer().getId());
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", String.format("%s %s", customer.getFirstName(), customer.getLastName()));
+        return dataResponse.dataResponse("OO", "success", data, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> fundTransfer(FundTransferDto fundTransferDto) {
+        Account debit = accountRepository.findAccountsByAccountNumber(fundTransferDto.getDebitAccount());
+        Account credit = accountRepository.findAccountsByAccountNumber(fundTransferDto.getCreditAccount());
+
+        if(Objects.isNull(debit)){
+            return dataResponse.dataResponse("99", "fail", errorMsg("Debit account not valid"), HttpStatus.BAD_REQUEST);
+        }
+
+        if(Objects.isNull(credit)){
+            return dataResponse.dataResponse("99", "fail", errorMsg("Credit account not valid"), HttpStatus.BAD_REQUEST);
+        }
+
+        double amount = Double.parseDouble(fundTransferDto.getAmount());
+        double senderBal = Double.parseDouble(debit.getWorkingBalance());
+        double receiverBal = Double.parseDouble(credit.getWorkingBalance());
+
+        if(senderBal > amount){
+            return dataResponse.dataResponse("01", "fail", errorMsg("Insufficient balance"), HttpStatus.BAD_REQUEST);
+        }
+
+        double newSenderBal = senderBal - amount;
+        double newReceiverBal = receiverBal + amount;
+
+        debit.setWorkingBalance(String.valueOf(newSenderBal));
+        accountRepository.save(debit);
+
+        credit.setWorkingBalance(String.valueOf(newReceiverBal));
+        accountRepository.save(credit);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("message", "Transaction successful");
+        return dataResponse.dataResponse("00", "success", data, HttpStatus.OK);
     }
 
     private Map<Object, Object> errorMsg(String message){

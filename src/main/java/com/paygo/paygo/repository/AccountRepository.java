@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, String> {
     Account findAccountByCustomerAndAccountType(Customer customer, String accountType);
+
+    Account findAccountsByAccountNumber(String accountNo);
     boolean existsByMnemonic(String mnemonic);
     List<Account> findAllByCustomer(Customer customer);
 }
